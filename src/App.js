@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase';
 import { reduxFirestore, firestoreReducer } from 'redux-firestore';
@@ -11,6 +12,10 @@ import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 import theme from './theme';
 import Pages from './Pages';
+
+if (!('MediaRecorder' in window)) {
+  window.MediaRecorder = require('audio-recorder-polyfill');
+}
 
 const config = {
   apiKey: "AIzaSyCQMef8Tz1QCXH6mv1RikGAttL0_OwVECk",

@@ -1,60 +1,47 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
+import Close from '@material-ui/icons/Close';
+import ComposerChooser from './ComposerChooser';
+import ComposerText from './ComposerText';
+import ComposerAudio from './ComposerAudio';
 
 class Composer extends Component {
   constructor(props) {
     super(props);
-    this.composerInput = createRef();
-  }
 
-  clearInput() {
-    this.composerInput.current.value = '';
-  }
-
-  async handleClick() {
-    const { firestore, userId } = this.props;
-    const { value } = this.composerInput.current;
-
-    if (!value) return;
-
-    const post = {
-      type: 'text',
-      value,
-      createdBy: userId,
-      createdAt: firestore.FieldValue.serverTimestamp(),
+    this.state = {
+      type: null,
     }
 
-    try {
-      await firestore.add({ collection: 'posts' }, post);
-      this.clearInput();
-    } catch (err) {
-      console.error(err);
-    }
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  async handleChange(type) {
+    this.setState({ type });
   }
 
   render() {
     const { avatarUrl, classes } = this.props;
+    const { type } = this.state;
 
     return (
       <Grid container alignItems="center" spacing={16} wrap="nowrap" className={classes.root}>
         <Grid item>
           <Avatar src={avatarUrl} className={classes.avatar} />
         </Grid>
-        <Grid item xs>
-          <TextField label="Wut?" variant="outlined" fullWidth autoFocus inputRef={this.composerInput} inputProps={{ maxLength: 5 }} />
-        </Grid>
-        <Grid item>
-          <IconButton color="primary" onClick={() => this.handleClick()}>
-            <KeyboardReturn />
-          </IconButton>
+        <Grid item xs className={classes.relative}>
+          {!type && <ComposerChooser handleChange={this.handleChange} />}
+          {type === 'text' && <ComposerText />}
+          {type === 'audio' && <ComposerAudio />}
+          {type && <IconButton aria-label="Close" className={classes.close} onClick={() => this.handleChange(null)}>
+            <Close fontSize="small" />
+          </IconButton>}
         </Grid>
       </Grid>);
   }
@@ -67,7 +54,15 @@ const styles = theme => ({
   avatar: {
     width: '4rem',
     height: '4rem',
-  }
+  },
+  relative: {
+    position: 'relative',
+  },
+  close: {
+    position: 'absolute',
+    top: '-1.2rem',
+    right: '-.9rem',
+  },
 });
 
 export default compose(
