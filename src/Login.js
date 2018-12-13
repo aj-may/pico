@@ -10,7 +10,7 @@ import GitHubIcon from './GitHubIcon';
 const Login = ({ classes, firebase }) => (
   <Grid container alignItems="center" justify="center" className={classes.gridContainer}>
     <Grid item className={classes.gridItem}>
-      <Typography variant="h1" align="center" gutterBottom>Pico</Typography>
+      <Typography variant="h1" align="center" gutterBottom>Piquo</Typography>
 
       <Button color="primary" fullWidth size="large" variant="contained" onClick={() => firebase.login({ provider: 'github', type: 'popup' })}>
         <SvgIcon className={classes.icon}><GitHubIcon /></SvgIcon> Sign In with GitHub

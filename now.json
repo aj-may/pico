@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "alias": "picoblog.now.sh",
+  "alias": "piquo.app",
   "builds": [
     { "src": "package.json", "use": "@now/static-build", "config": { "distDir": "build" } }
   ],

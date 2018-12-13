@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Login from './Login';
-import Pico from './Pico';
+import Piquo from './Piquo';
 import Loading from './Loading';
 
 const Pages = props => (
   <Fragment>
     {props.isLoading && <Loading />}
     {!props.isLoading && !props.isAuthenticated && <Login />}
-    {!props.isLoading && props.isAuthenticated && <Pico />}
+    {!props.isLoading && props.isAuthenticated && <Piquo />}
   </Fragment>
 );
 

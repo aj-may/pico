@@ -1,1 +1,2 @@
-# Pico
+# Piquo
+Smaller than micro blogging

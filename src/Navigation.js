@@ -9,7 +9,7 @@ import Grow from './Grow';
 const Navigation = ({ className }) => (
   <AppBar position="static" className={className}>
     <Toolbar>
-      <Typography variant="h6" color="inherit">Pico</Typography>
+      <Typography variant="h6" color="inherit">Piquo</Typography>
       <Grow />
       <Search />
       <UserMenu />
