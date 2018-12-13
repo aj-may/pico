@@ -3,11 +3,11 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect, populate } from 'react-redux-firebase';
 import { map, reverse } from 'lodash';
-import Post from './Post';
+import Pique from './Pique';
 
-const Feed = ({ posts, firebase }) => (
+const Feed = ({ piques, firebase }) => (
   <Fragment>
-    {reverse(map(posts, (post, key) => <Post post={post} key={key} />))}
+    {reverse(map(piques, (pique, key) => <Pique pique={pique} key={key} />))}
   </Fragment>);
 
 const populates = [{ child: 'createdBy', root: 'users' }];
@@ -22,6 +22,6 @@ export default compose(
     }
   ]),
   connect((state) => ({
-    posts: populate(state.firestore, collection, populates),
+    piques: populate(state.firestore, collection, populates),
   }))
 )(Feed);

@@ -2,9 +2,9 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 
-const PostText = ({ post }) => <Chip
-  avatar={<Avatar src={post.createdBy.avatarUrl} />}
-  label={post.value}
+const PiqueText = ({ pique }) => <Chip
+  avatar={<Avatar src={pique.createdBy.avatarUrl} />}
+  label={pique.value}
   variant="outlined" />;
 
-export default PostText;
+export default PiqueText;
