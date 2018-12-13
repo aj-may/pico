@@ -7,7 +7,7 @@ import Navigation from './Navigation';
 import Composer from './Composer';
 import Feed from './Feed';
 
-const Pico = ({ classes }) => (
+const Piquo = ({ classes }) => (
   <Fragment>
     <Navigation className={classes.navigation} />
 
@@ -34,4 +34,4 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(Pico);
+export default withStyles(styles)(Piquo);
