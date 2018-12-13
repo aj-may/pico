@@ -13,9 +13,7 @@ import logger from 'redux-logger';
 import theme from './theme';
 import Pages from './Pages';
 
-if (!('MediaRecorder' in window)) {
-  window.MediaRecorder = require('audio-recorder-polyfill');
-}
+window.MediaRecorder = require('audio-recorder-polyfill');
 
 const config = {
   apiKey: "AIzaSyCQMef8Tz1QCXH6mv1RikGAttL0_OwVECk",
