@@ -24,7 +24,7 @@ class ComposerText extends Component {
 
     if (!value) return;
 
-    const post = {
+    const pique = {
       type: 'text',
       value,
       createdBy: userId,
@@ -32,7 +32,7 @@ class ComposerText extends Component {
     }
 
     try {
-      await firestore.add({ collection: 'posts' }, post);
+      await firestore.add({ collection: 'posts' }, pique);
       this.clearInput();
     } catch (err) {
       console.error(err);

@@ -3,14 +3,14 @@ import { firestoreConnect } from 'react-redux-firebase';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 
-class PostAudio extends Component {
+class PiqueAudio extends Component {
   state = {
     ready: false,
   }
 
   async componentDidMount() {
-    const { post, firebase } = this.props;
-    const audioURL = await firebase.storage().ref(post.value).getDownloadURL();
+    const { pique, firebase } = this.props;
+    const audioURL = await firebase.storage().ref(pique.value).getDownloadURL();
     this.audio = new Audio(audioURL);
     this.setState({ ready: true });
   }
@@ -20,11 +20,11 @@ class PostAudio extends Component {
   }
 
   render() {
-    const { post } = this.props;
+    const { pique } = this.props;
     const { ready } = this.state;
 
     return <Chip
-      avatar={<Avatar src={post.createdBy.avatarUrl} />}
+      avatar={<Avatar src={pique.createdBy.avatarUrl} />}
       label="▶︎"
       variant="outlined"
       clickable={ready}
@@ -32,4 +32,4 @@ class PostAudio extends Component {
   }
 }
 
-export default firestoreConnect()(PostAudio);
+export default firestoreConnect()(PiqueAudio);

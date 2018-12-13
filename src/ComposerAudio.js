@@ -45,7 +45,7 @@ class ComposerAudio extends Component {
     setTimeout(() => this.setState({ progress: 0 }), 1000);
   }
 
-  async handlePost() {
+  async handleSubmit() {
     const { firebase, firestore, userId } = this.props;
 
     try {
@@ -54,14 +54,14 @@ class ComposerAudio extends Component {
 
       if (!value) return;
 
-      const post = {
+      const pique = {
         type: 'audio',
         value,
         createdBy: userId,
         createdAt: firestore.FieldValue.serverTimestamp(),
       }
 
-      await firestore.add({ collection: 'posts' }, post);
+      await firestore.add({ collection: 'posts' }, pique);
     } catch (err) {
       console.error(err);
     }
@@ -85,7 +85,7 @@ class ComposerAudio extends Component {
           <LinearProgress variant="determinate" value={progress} />
         </Grid>
         <Grid item>
-          <IconButton color="primary" onClick={() => this.handlePost()}>
+          <IconButton color="primary" onClick={() => this.handleSubmit()}>
             <KeyboardReturn />
           </IconButton>
         </Grid>
