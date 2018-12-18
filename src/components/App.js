@@ -4,7 +4,7 @@ import Login from './Login';
 import Piquo from './Piquo';
 import Loading from './Loading';
 
-const Pages = props => (
+const App = props => (
   <Fragment>
     {props.isLoading && <Loading />}
     {!props.isLoading && !props.isAuthenticated && <Login />}
@@ -14,7 +14,7 @@ const Pages = props => (
 
 const mapStateToProps = state => ({
   isLoading: !state.firebase.auth.isLoaded,
-  isAuthenticated: !state.firebase.auth.isEmpty,
-})
+  isAuthenticated: !state.firebase.auth.isEmpty
+});
 
-export default connect(mapStateToProps)(Pages);
+export default connect(mapStateToProps)(App);

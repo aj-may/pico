@@ -1,11 +1,58 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { Fragment } from 'react';
+import { render } from 'react-dom';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase';
+import { reduxFirestore, firestoreReducer } from 'redux-firestore';
+import { Provider } from 'react-redux';
+import App from './components/App';
+import logger from 'redux-logger';
+import theme from './theme';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+window.MediaRecorder = require('audio-recorder-polyfill');
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const config = {
+  apiKey: 'AIzaSyCQMef8Tz1QCXH6mv1RikGAttL0_OwVECk',
+  authDomain: 'pico-a19ee.firebaseapp.com',
+  databaseURL: 'https://pico-a19ee.firebaseio.com',
+  projectId: 'pico-a19ee',
+  storageBucket: 'pico-a19ee.appspot.com',
+  messagingSenderId: '139228562797'
+};
+
+const rrfConfig = {
+  userProfile: 'users',
+  useFirestoreForProfile: true
+};
+
+firebase.initializeApp(config);
+firebase.firestore().settings({ timestampsInSnapshots: true });
+
+const createStoreWithFirebase = compose(
+  reduxFirestore(firebase),
+  reactReduxFirebase(firebase, rrfConfig)
+)(createStore);
+
+const rootReducer = combineReducers({
+  firebase: firebaseReducer,
+  firestore: firestoreReducer
+});
+
+const store = createStoreWithFirebase(rootReducer, applyMiddleware(logger));
+
+render(
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Fragment>
+        <CssBaseline />
+        <App />
+      </Fragment>
+    </Provider>
+  </MuiThemeProvider>,
+  document.getElementById('root')
+);
