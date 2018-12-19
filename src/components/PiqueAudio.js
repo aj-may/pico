@@ -8,7 +8,9 @@ import Avatar from '@material-ui/core/Avatar';
 class PiqueAudio extends Component {
   state = {
     ready: false,
-  }
+  };
+
+  handleClick = () => this.audio && this.audio.play();
 
   handleDelete = this.props.pique.createdBy.id === this.props.userId ?
     () => { this.props.firestore.collection('posts').doc(this.props.pique.id).delete() } : null;
@@ -20,10 +22,6 @@ class PiqueAudio extends Component {
     this.setState({ ready: true });
   }
 
-  handleClick() {
-    if (this.audio) this.audio.play();
-  }
-
   render() {
     const { pique } = this.props;
     const { ready } = this.state;
@@ -33,7 +31,7 @@ class PiqueAudio extends Component {
       label="▶︎"
       variant="outlined"
       clickable={ready}
-      onClick={() => this.handleClick()}
+      onClick={this.handleClick}
       onDelete={this.handleDelete} />;
   }
 }
