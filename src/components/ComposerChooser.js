@@ -3,8 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import TextFields from '@material-ui/icons/TextFields';
 import Mic from '@material-ui/icons/Mic';
+import Gif from '@material-ui/icons/Gif';
 // import PhotoCamera from '@material-ui/icons/PhotoCamera';
-// import ColorLens from '@material-ui/icons/ColorLens';
 
 const ComposerChooser = ({ handleChange }) => (
   <Grid container spacing={16} wrap="nowrap">
@@ -26,11 +26,11 @@ const ComposerChooser = ({ handleChange }) => (
       </IconButton>
     </Grid>
 
-    {/*<Grid item>
-      <IconButton color="primary" aria-label="Post Color"onClick={() => handleChange('color')}>
-        <ColorLens fontSize="large" />
+    {<Grid item>
+      <IconButton color="primary" aria-label="Post Color"onClick={() => handleChange('gif')}>
+        <Gif fontSize="large" />
       </IconButton>
-    </Grid>*/}
+    </Grid>}
   </Grid>);
 
 export default ComposerChooser;
