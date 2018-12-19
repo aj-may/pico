@@ -6,8 +6,11 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 
 const PiqueText = ({ pique, firestore, userId }) => {
-  const handleDelete = pique.createdBy.id === userId ?
-    () => { firestore.collection('posts').doc(pique.id).delete() } : null;
+  const isMine = () => pique.createdBy.id === userId;
+
+  const handleDelete = isMine() ? () => {
+    firestore.collection('posts').doc(pique.id).delete();
+  } : null;
 
   return <Chip
     avatar={<Avatar src={pique.createdBy.avatarUrl} />}

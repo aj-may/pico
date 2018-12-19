@@ -12,8 +12,15 @@ class PiqueAudio extends Component {
 
   handleClick = () => this.audio && this.audio.play();
 
-  handleDelete = this.props.pique.createdBy.id === this.props.userId ?
-    () => { this.props.firestore.collection('posts').doc(this.props.pique.id).delete() } : null;
+  isMine = () => {
+    const { pique, userId } = this.props;
+    return pique.createdBy.id === userId;
+  }
+
+  handleDelete = this.isMine() ? () => {
+    const { firestore, pique } = this.props;
+    firestore.collection('posts').doc(pique.id).delete();
+  } : null;
 
   async componentDidMount() {
     const { pique, firebase } = this.props;
