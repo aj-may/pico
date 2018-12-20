@@ -7,7 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 
 class PiqueAudio extends Component {
   state = {
-    ready: false,
+    isReady: false,
+    isPlaying: false,
   };
 
   handleClick = () => this.audio && this.audio.play();
@@ -25,19 +26,22 @@ class PiqueAudio extends Component {
   async componentDidMount() {
     const { pique, firebase } = this.props;
     const audioURL = await firebase.storage().ref(pique.value).getDownloadURL();
+
     this.audio = new Audio(audioURL);
-    this.setState({ ready: true });
+    this.audio.addEventListener('canplay', () => this.setState({ isReady: true }));
+    this.audio.addEventListener('play', () => this.setState({ isPlaying: true }));
+    this.audio.addEventListener('pause', () => this.setState({ isPlaying: false }));
   }
 
   render() {
     const { pique } = this.props;
-    const { ready } = this.state;
+    const { isReady, isPlaying } = this.state;
 
     return <Chip
       avatar={<Avatar src={pique.createdBy.avatarUrl} />}
-      label="▶︎"
+      label={isPlaying ? '||' : '▶'}
       variant="outlined"
-      clickable={ready}
+      clickable={isReady}
       onClick={this.handleClick}
       onDelete={this.handleDelete} />;
   }
