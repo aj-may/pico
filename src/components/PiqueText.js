@@ -14,7 +14,7 @@ const PiqueText = ({ pique, firestore, userId }) => {
 
   return <Chip
     avatar={<Avatar src={pique.createdBy.avatarUrl} />}
-    label={pique.value}
+    label={pique.value.substring(0, 5)}
     variant="outlined"
     onDelete={handleDelete} />;
 };
