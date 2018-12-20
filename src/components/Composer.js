@@ -10,6 +10,7 @@ import Close from '@material-ui/icons/Close';
 import ComposerChooser from './ComposerChooser';
 import ComposerText from './ComposerText';
 import ComposerAudio from './ComposerAudio';
+import ComposerGif from './ComposerGif';
 
 class Composer extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class Composer extends Component {
           {!type && <ComposerChooser handleChange={this.handleChange} />}
           {type === 'text' && <ComposerText />}
           {type === 'audio' && <ComposerAudio />}
+          {type === 'gif' && <ComposerGif />}
           {type && <IconButton aria-label="Close" className={classes.close} onClick={() => this.handleChange(null)}>
             <Close fontSize="small" />
           </IconButton>}

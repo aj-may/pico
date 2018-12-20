@@ -2,12 +2,14 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PiqueText from './PiqueText';
 import PiqueAudio from './PiqueAudio';
+import PiqueGif from './PiqueGif';
 import santaHat from './santaHat.svg';
 
 const Pique = ({ classes, pique }) => pique.type ? (
   <div className={classes.pique}>
     {pique.type === 'text' && <PiqueText pique={pique} />}
     {pique.type === 'audio' && <PiqueAudio pique={pique} />}
+    {pique.type === 'gif' && <PiqueGif pique={pique} />}
     <img src={santaHat} className={classes.hat} alt="" />
   </div>) : null;
 
