@@ -4,12 +4,12 @@ import PiqueText from './PiqueText';
 import PiqueAudio from './PiqueAudio';
 import santaHat from './santaHat.svg';
 
-const Pique = ({ classes, pique }) => (
+const Pique = ({ classes, pique }) => pique.type ? (
   <div className={classes.pique}>
     {pique.type === 'text' && <PiqueText pique={pique} />}
     {pique.type === 'audio' && <PiqueAudio pique={pique} />}
     <img src={santaHat} className={classes.hat} alt="" />
-  </div>);
+  </div>) : null;
 
 const styles = theme => ({
   pique: {
