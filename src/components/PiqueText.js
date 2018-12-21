@@ -7,6 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 const PiqueText = ({ pique, firestore, userId }) => {
   const isMine = () => pique.createdBy.id === userId;
+  const truncate = str => Array.from(str).slice(0,5).join('');
 
   const handleDelete = isMine() ? () => {
     firestore.collection('posts').doc(pique.id).delete();
@@ -14,7 +15,7 @@ const PiqueText = ({ pique, firestore, userId }) => {
 
   return <Chip
     avatar={<Avatar src={pique.createdBy.avatarUrl} />}
-    label={pique.value.substring(0, 5)}
+    label={truncate(pique.value)}
     variant="outlined"
     onDelete={handleDelete} />;
 };
