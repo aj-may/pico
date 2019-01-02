@@ -3,9 +3,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
-import Navigation from './Navigation';
-import Composer from './Composer';
-import Feed from './Feed';
+import Navigation from '../components/Navigation';
+import Composer from '../components/Composer';
+import Feed from '../components/Feed';
 
 const Piquo = ({ classes }) => (
   <Fragment>
