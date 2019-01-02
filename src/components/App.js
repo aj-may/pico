@@ -1,16 +1,22 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import Login from './Login';
-import Piquo from './Piquo';
+import { Route, Switch } from 'react-router-dom';
+import Login from '../pages/Login';
+import Home from '../pages/Home';
+import FourOhFour from '../pages/FourOhFour';
 import Loading from './Loading';
 
-const App = props => (
-  <Fragment>
-    {props.isLoading && <Loading />}
-    {!props.isLoading && !props.isAuthenticated && <Login />}
-    {!props.isLoading && props.isAuthenticated && <Piquo />}
-  </Fragment>
-);
+const App = ({ isLoading, isAuthenticated }) => {
+  if (isLoading) return <Loading />;
+  if (!isAuthenticated) return <Login />;
+
+  return (
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route component={FourOhFour} />
+    </Switch>
+  );
+};
 
 const mapStateToProps = state => ({
   isLoading: !state.firebase.auth.isLoaded,

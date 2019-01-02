@@ -5,7 +5,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { withFirebase } from 'react-redux-firebase';
-import GitHubIcon from './GitHubIcon';
+import GitHubIcon from '../components/GitHubIcon';
 
 const Login = ({ classes, firebase }) => (
   <Grid container alignItems="center" justify="center" className={classes.gridContainer}>
