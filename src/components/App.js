@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Login from '../pages/Login';
-import Home from '../pages/Home';
+import Topic from '../pages/Topic';
 import FourOhFour from '../pages/FourOhFour';
 import ChooseHandle from '../pages/ChooseHandle';
 import Loading from './Loading';
@@ -15,7 +15,8 @@ const App = ({ isLoading, isAuthenticated, needsHandle }) => {
 
   return (
     <Switch>
-      <Route exact path="/" component={Home} />
+      <Route exact path="/" component={Topic} />
+      <Route exact path="/:type(tag|user)/:value" component={Topic} />
       <Route component={FourOhFour} />
     </Switch>
   );
