@@ -10,8 +10,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase';
 import { reduxFirestore, firestoreReducer } from 'redux-firestore';
 import { Provider } from 'react-redux';
-import { createBrowserHistory } from 'history';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './components/App';
 import logger from 'redux-logger';
 import theme from './theme';
@@ -46,17 +45,16 @@ const rootReducer = combineReducers({
 });
 
 const store = createStoreWithFirebase(rootReducer, applyMiddleware(logger));
-const history = createBrowserHistory();
 
 render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
-      <Router history={history}>
+      <BrowserRouter>
         <Fragment>
           <CssBaseline />
           <App />
         </Fragment>
-      </Router>
+      </BrowserRouter>
     </Provider>
   </MuiThemeProvider>,
   document.getElementById('root')
