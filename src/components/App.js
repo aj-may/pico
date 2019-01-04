@@ -4,11 +4,13 @@ import { Route, Switch } from 'react-router-dom';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import FourOhFour from '../pages/FourOhFour';
+import ChooseHandle from '../pages/ChooseHandle';
 import Loading from './Loading';
 
-const App = ({ isLoading, isAuthenticated }) => {
+const App = ({ isLoading, isAuthenticated, needsHandle }) => {
   if (isLoading) return <Loading />;
   if (!isAuthenticated) return <Login />;
+  if (needsHandle) return <ChooseHandle />;
 
   return (
     <Switch>
@@ -20,7 +22,8 @@ const App = ({ isLoading, isAuthenticated }) => {
 
 const mapStateToProps = state => ({
   isLoading: !state.firebase.auth.isLoaded,
-  isAuthenticated: !state.firebase.auth.isEmpty
+  isAuthenticated: !state.firebase.auth.isEmpty,
+  needsHandle: state.firebase.profile.isLoaded && !state.firebase.profile.handle,
 });
 
 export default connect(mapStateToProps)(App);
