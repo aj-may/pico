@@ -1,6 +1,7 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import FourOhFour from '../pages/FourOhFour';
@@ -23,4 +24,7 @@ const mapStateToProps = state => ({
   isAuthenticated: !state.firebase.auth.isEmpty
 });
 
-export default connect(mapStateToProps)(App);
+export default compose(
+  withRouter,
+  connect(mapStateToProps)
+)(App);
