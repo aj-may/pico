@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
@@ -93,10 +92,7 @@ class ComposerAudio extends Component {
   }
 };
 
-const styles = theme => ({});
-
 export default compose(
-  withStyles(styles),
   firestoreConnect(),
   connect((state) => ({
     userId: state.firebase.auth.uid,
