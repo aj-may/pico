@@ -32,7 +32,7 @@ const Topic = ({ classes, history, match, topics }) => {
         <Paper className={classes.container}>
           <Composer />
           <Divider />
-          <Feed />
+          <Feed type={type} value={value} />
         </Paper>
       </Grid>
     </Grid>);
