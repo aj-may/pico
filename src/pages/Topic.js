@@ -20,9 +20,8 @@ const Topic = ({ classes, history, match, topics }) => {
     history.push(path);
   }
 
-  const { path, params } = match;
-  const topic =
-    path === '/' ? '#general' : `${params.type === 'tag' ? '#' : '@'}${params.value}`;
+  const { type, value } = match.params;
+  const topic = `${type === 'tag' ? '#' : '@'}${value}`;
 
   return (
     <Grid container justify="center" spacing={40}>
