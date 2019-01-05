@@ -41,7 +41,9 @@ const Topic = ({ classes, history, match, topics }) => {
 
 const mapStateToProps = (state) => {
   const tags = map(state.firestore.data.tags, (_, key) => `#${key}`);
-  const users = map(state.firestore.data.users, (user, key) => `@${user.displayName.toLowerCase().replace(/\W/g, '')}`);
+  const users = map(state.firestore.data.users, user => user.handle)
+    .filter(handle => handle)
+    .map(handle => `@${handle}`);
 
   return { topics: tags.concat(users) };
 }
