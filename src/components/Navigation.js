@@ -1,4 +1,5 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -6,8 +7,8 @@ import Search from './Search';
 import UserMenu from './UserMenu';
 import Grow from './Grow';
 
-const Navigation = ({ className }) => (
-  <AppBar position="static" className={className}>
+const Navigation = ({ classes }) => (
+  <AppBar position="static" className={classes.navigation}>
     <Toolbar>
       <Typography variant="h6" color="inherit">Piquo</Typography>
       <Grow />
@@ -16,4 +17,10 @@ const Navigation = ({ className }) => (
     </Toolbar>
   </AppBar>);
 
-export default Navigation;
+const styles = theme => ({
+  navigation: {
+    marginBottom: theme.spacing.unit * 3,
+  },
+});
+
+export default withStyles(styles)(Navigation);

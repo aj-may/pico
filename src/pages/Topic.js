@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -7,7 +7,6 @@ import { map } from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
-import Navigation from '../components/Navigation';
 import Composer from '../components/Composer';
 import Feed from '../components/Feed';
 import TopicChooser from '../components/TopicChooser';
@@ -26,22 +25,18 @@ const Topic = ({ classes, history, match, topics }) => {
     path === '/' ? '#general' : `${params.type === 'tag' ? '#' : '@'}${params.value}`;
 
   return (
-    <Fragment>
-      <Navigation className={classes.navigation} />
-
-      <Grid container justify="center" spacing={40}>
-        <Grid item>
-          <TopicChooser defaultValue={topic} options={topics} handleSelect={navigate} />
-        </Grid>
-        <Grid item>
-          <Paper className={classes.container}>
-            <Composer />
-            <Divider />
-            <Feed />
-          </Paper>
-        </Grid>
+    <Grid container justify="center" spacing={40}>
+      <Grid item>
+        <TopicChooser defaultValue={topic} options={topics} handleSelect={navigate} />
       </Grid>
-    </Fragment>);
+      <Grid item>
+        <Paper className={classes.container}>
+          <Composer />
+          <Divider />
+          <Feed />
+        </Paper>
+      </Grid>
+    </Grid>);
 };
 
 const mapStateToProps = (state) => {
@@ -52,9 +47,6 @@ const mapStateToProps = (state) => {
 }
 
 const styles = theme => ({
-  navigation: {
-    marginBottom: theme.spacing.unit * 3,
-  },
   container: {
     width: '30rem',
     maxWidth: '100vw',
