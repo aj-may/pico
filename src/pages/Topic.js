@@ -30,7 +30,7 @@ const Topic = ({ classes, history, match, topics }) => {
       </Grid>
       <Grid item>
         <Paper className={classes.container}>
-          <Composer />
+          <Composer tag={type === 'tag' ? value : 'general'} />
           <Divider />
           <Feed type={type} value={value} />
         </Paper>

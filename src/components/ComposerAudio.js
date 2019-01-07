@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,7 +15,7 @@ class ComposerAudio extends Component {
     progress: 0,
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     this.setState({ ready: true });
     this.recorder = new window.MediaRecorder(this.stream);
@@ -26,57 +24,52 @@ class ComposerAudio extends Component {
       this.audio = new Audio(URL.createObjectURL(data));
       this.setState({ done: true, progress: 0 });
     });
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     if(this.stream) this.stream.getTracks().forEach(track => track.stop());
-  }
+  };
 
-  handleRecord() {
+  handleRecord = () => {
     this.recorder.start();
     this.setState({ progress: 100 });
     setTimeout(() => this.recorder.stop(), 1000);
-  }
+  };
 
-  handlePlay() {
+  handlePlay = () => {
     this.audio.play();
     this.setState({ progress: 100 });
     setTimeout(() => this.setState({ progress: 0 }), 1000);
-  }
+  };
 
-  async handleSubmit() {
-    const { firebase, firestore, userId } = this.props;
+  handleSubmit = async () => {
+    const { firebase } = this.props;
 
     try {
       const result = await firebase.uploadFile('audio', this.audioBlob, null, { name: uuid() });
+
+      const type = 'audio';
       const value = result.uploadTaskSnapshot.metadata.fullPath;
 
       if (!value) return;
 
-      const pique = {
-        type: 'audio',
-        value,
-        createdBy: userId,
-        createdAt: firestore.FieldValue.serverTimestamp(),
-      }
-
-      await firestore.add({ collection: 'posts' }, pique);
+      this.props.handleSubmit({ type, value });
     } catch (err) {
       console.error(err);
     }
   }
 
-  render() {
+  render = () => {
     const { ready, done, progress } = this.state;
 
     return (
       <Grid container alignItems="center" spacing={16} wrap="nowrap">
         <Grid item>
-          {!done &&<IconButton color="secondary" onClick={() => this.handleRecord()} disabled={!ready}>
+          {!done &&<IconButton color="secondary" onClick={this.handleRecord} disabled={!ready}>
             <FiberManualRecord />
           </IconButton>}
 
-          {done &&<IconButton color="primary" onClick={() => this.handlePlay()}>
+          {done &&<IconButton color="primary" onClick={this.handlePlay}>
             <PlayArrow />
           </IconButton>}
         </Grid>
@@ -84,17 +77,12 @@ class ComposerAudio extends Component {
           <LinearProgress variant="determinate" value={progress} />
         </Grid>
         <Grid item>
-          <IconButton color="primary" onClick={() => this.handleSubmit()}>
+          <IconButton color="primary" onClick={this.handleSubmit}>
             <KeyboardReturn />
           </IconButton>
         </Grid>
       </Grid>);
-  }
+  };
 };
 
-export default compose(
-  firestoreConnect(),
-  connect((state) => ({
-    userId: state.firebase.auth.uid,
-  }))
-)(ComposerAudio);
+export default firestoreConnect()(ComposerAudio);
