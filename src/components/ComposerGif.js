@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 
-class ComposerText extends Component {
+class ComposerGif extends Component {
   state = { value: '' };
 
   handleChange = event =>
@@ -54,4 +54,4 @@ class ComposerText extends Component {
     </form>);
 };
 
-export default ComposerText;
+export default ComposerGif;
