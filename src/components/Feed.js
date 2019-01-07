@@ -19,9 +19,8 @@ export default compose(
     }
   ]),
   connect((state) => ({
-    piques: map(state.firestore.ordered.posts, (p, id) => ({
+    piques: map(state.firestore.ordered.posts, p => ({
       ...p,
-      id,
       createdBy: {
         id: p.createdBy,
         ...state.firestore.data.users[p.createdBy],
