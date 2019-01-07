@@ -13,21 +13,11 @@ import ComposerAudio from './ComposerAudio';
 import ComposerGif from './ComposerGif';
 
 class Composer extends Component {
-  constructor(props) {
-    super(props);
+  state = { type: null };
 
-    this.state = {
-      type: null,
-    }
+  handleChange = type => this.setState({ type });
 
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  async handleChange(type) {
-    this.setState({ type });
-  }
-
-  render() {
+  render = () =>  {
     const { avatarUrl, classes } = this.props;
     const { type } = this.state;
 
@@ -46,7 +36,7 @@ class Composer extends Component {
           </IconButton>}
         </Grid>
       </Grid>);
-  }
+  };
 };
 
 const styles = theme => ({
