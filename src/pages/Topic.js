@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from '@material-ui/core/styles';
-import { map } from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
@@ -11,22 +10,19 @@ import Composer from '../components/Composer';
 import Feed from '../components/Feed';
 import TopicChooser from '../components/TopicChooser';
 
-const Topic = ({ classes, history, match, topics }) => {
-  const navigate = topic => {
-    const type = topic[0] === '#' ? 'tag' : 'user';
-    const value = topic.substring(1);
-    const path = `/${type}/${value}`;
-
-    history.push(path);
-  }
-
+const Topic = ({ classes, history, match, user }) => {
   const { type, value } = match.params;
-  const topic = `${type === 'tag' ? '#' : '@'}${value}`;
+
+  const getTopic = () => {
+    if (type === 'tag') return `#${value}`;
+    if (type === 'user' && user) return `@${user.handle}`;
+    return null;
+  };
 
   return (
     <Grid container justify="center" spacing={40}>
       <Grid item>
-        <TopicChooser defaultValue={topic} options={topics} handleSelect={navigate} />
+        <TopicChooser defaultValue={getTopic()} handleSelect={history.push} />
       </Grid>
       <Grid item>
         <Paper className={classes.container}>
@@ -38,15 +34,6 @@ const Topic = ({ classes, history, match, topics }) => {
     </Grid>);
 };
 
-const mapStateToProps = (state) => {
-  const tags = map(state.firestore.data.tags, (_, key) => `#${key}`);
-  const users = map(state.firestore.data.users, user => user.handle)
-    .filter(handle => handle)
-    .map(handle => `@${handle}`);
-
-  return { topics: tags.concat(users) };
-}
-
 const styles = theme => ({
   container: {
     width: '30rem',
@@ -57,7 +44,15 @@ const styles = theme => ({
 });
 
 export default compose(
-  firestoreConnect(['tags', 'users']),
-  connect(mapStateToProps),
+  firestoreConnect(props => {
+    const { type, value } = props.match.params;
+
+    if (type === 'tag') return [{ collection: 'tags', doc: value, storeAs: 'tag' }];
+    if (type === 'user') return [{ collection: 'users', doc: value, storeAs: 'user' }];
+  }),
+  connect((state) => ({
+    tag: state.firestore.data.tag,
+    user: state.firestore.data.user,
+  })),
   withStyles(styles),
 )(Topic);

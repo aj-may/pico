@@ -15,7 +15,7 @@ export default compose(
     {
       collection: 'posts',
       orderBy: ['createdAt', 'desc'],
-      where: [props.type, '==', props.value],
+      where: [props.type === 'tag' ? 'tag' : 'createdBy', '==', props.value],
     }
   ]),
   connect((state) => ({

@@ -1,4 +1,7 @@
 import React, { Component, createRef } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
@@ -42,7 +45,7 @@ class TopicChooser extends Component {
       if (suggestions.length < 1) return;
 
       event.preventDefault();
-      this.setState({ value: suggestions[0] });
+      this.setState({ value: suggestions[0].label });
     }
 
     // select suggestion
@@ -67,9 +70,9 @@ class TopicChooser extends Component {
 
   handleChange = event => {
     const value = event.target.value.toLowerCase() || '#';
-    const { options } = this.props;
-    const suggestions = value.length > 1 ? options
-      .filter(option => option.substring(0, value.length) === value) : [];
+    const { topics } = this.props;
+    const suggestions = value.length > 1 ? topics
+      .filter(({ label }) => label.substring(0, value.length) === value) : [];
 
     this.setState({
       value,
@@ -86,7 +89,7 @@ class TopicChooser extends Component {
   };
 
   handleSelect = topic => {
-    this.props.handleSelect(topic);
+    this.props.handleSelect(topic.path);
     this.setState({ suggestions: [] });
   }
 
@@ -104,7 +107,7 @@ class TopicChooser extends Component {
           {active && <Typography variant='h2' align='right'>
             {value}
             <span className={classes.completion}>
-              {suggestions.length > 0 && suggestions[selected].substring(value.length)}
+              {suggestions.length > 0 && suggestions[selected].label.substring(value.length)}
             </span>
           </Typography>}
 
@@ -124,7 +127,7 @@ class TopicChooser extends Component {
           {suggestions.map((suggestion, i) =>
             <ListItem key={i} button selected={i === selected} onClick={() => this.handleSelect(suggestion)}>
               <ListItemText primaryTypographyProps={{ align: 'right' }}>
-                {suggestion}
+                {suggestion.label}
               </ListItemText>
             </ListItem>
           )}
@@ -162,4 +165,23 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(TopicChooser);
+export default compose(
+  firestoreConnect(['tags', 'users']),
+  connect((state) => {
+    const tags = (state.firestore.ordered.tags || [])
+      .map(({ id }) => ({
+        label: `#${id}`,
+        path: `/tag/${id}`,
+      }));
+
+    const users = (state.firestore.ordered.users || [])
+      .filter(({ handle }) => handle)
+      .map(({ id, handle }) => ({
+        label: `@${handle}`,
+        path: `/user/${id}`,
+      }));
+
+    return { topics: tags.concat(users) };
+  }),
+  withStyles(styles),
+)(TopicChooser);
