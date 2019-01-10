@@ -6,6 +6,7 @@ import Navigation from './Navigation';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Topic from '../pages/Topic';
+import Settings from '../pages/Settings';
 import FourOhFour from '../pages/FourOhFour';
 import ChooseHandle from '../pages/ChooseHandle';
 import Loading from './Loading';
@@ -22,6 +23,7 @@ const App = ({ isLoading, isAuthenticated, needsHandle }) => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/:type(tag|user)/:value" component={Topic} />
+        <Route exact path="/settings" component={Settings} />
         <Route component={FourOhFour} />
       </Switch>
     </Fragment>
