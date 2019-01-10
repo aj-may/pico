@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import Composer from '../components/Composer';
 import Feed from '../components/Feed';
 import TopicChooser from '../components/TopicChooser';
+import UserDetails from '../components/UserDetails';
 
 const Topic = ({ classes, history, match, user }) => {
   const { type, value } = match.params;
@@ -23,6 +24,8 @@ const Topic = ({ classes, history, match, user }) => {
     <Grid container justify="center" spacing={16} className={classes.container}>
       <Grid item sm={4}>
         <TopicChooser defaultValue={getTopic()} handleSelect={history.push} />
+
+        { type === 'user' && user && <UserDetails user={user} />}
       </Grid>
 
       <Grid item sm={8}>
