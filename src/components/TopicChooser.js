@@ -139,7 +139,6 @@ class TopicChooser extends Component {
 
 const styles = theme => ({
   root: {
-    width: '20rem',
     marginTop: '3rem',
   },
   inputContainer: {

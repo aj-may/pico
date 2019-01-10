@@ -20,12 +20,13 @@ const Topic = ({ classes, history, match, user }) => {
   };
 
   return (
-    <Grid container justify="center" spacing={40}>
-      <Grid item>
+    <Grid container justify="center" spacing={16} className={classes.container}>
+      <Grid item sm={4}>
         <TopicChooser defaultValue={getTopic()} handleSelect={history.push} />
       </Grid>
-      <Grid item>
-        <Paper className={classes.container}>
+
+      <Grid item sm={8}>
+        <Paper className={classes.paper}>
           <Composer tag={type === 'tag' ? value : 'general'} />
           <Divider />
           <Feed type={type} value={value} />
@@ -36,10 +37,12 @@ const Topic = ({ classes, history, match, user }) => {
 
 const styles = theme => ({
   container: {
-    width: '30rem',
+    width: `${theme.breakpoints.values.sm}px`,
     maxWidth: '100vw',
+    margin: `${theme.spacing.unit * 1}px auto`,
+  },
+  paper: {
     padding: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit * 3,
   },
 });
 
