@@ -11,13 +11,23 @@ const Feed = ({ piques }) => (
   </Fragment>);
 
 export default compose(
-  firestoreConnect(props => [
-    {
+  firestoreConnect(props => {
+    let where;
+
+    if (props.type === 'tag') {
+      where = ['tags', 'array-contains', props.value];
+    }
+
+    if (props.type === 'user') {
+      where = ['createdBy', '==', props.value];
+    }
+
+    return [{
       collection: 'posts',
       orderBy: ['createdAt', 'desc'],
-      where: [props.type === 'tag' ? 'tag' : 'createdBy', '==', props.value],
-    }
-  ]),
+      where,
+    }];
+  }),
   connect((state) => ({
     piques: map(state.firestore.ordered.posts, p => ({
       ...p,
