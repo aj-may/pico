@@ -1,68 +1,57 @@
-import React, { Component, createRef, Fragment } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
 import GiphyClient from 'giphy-js-sdk-core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 
-class ComposerText extends Component {
-  composerInput = createRef();
+class ComposerGif extends Component {
+  state = { value: '' };
 
-  clearInput = () => this.composerInput.current.value = '';
+  handleChange = event =>
+    this.setState({ value: event.target.value });
 
-  handleClick = async () => {
+  handleSubmit = async (event) => {
+    event.preventDefault();
+
     const giphy = GiphyClient('5XbIEP9UTzsBglksDmHEx2hJ6eJzTbha');
-    const { firestore, userId } = this.props;
-    const { value } = this.composerInput.current;
+    const type = 'gif';
+    const { value } = this.state;
 
     if (!value) return;
 
-    const response = await giphy.translate('gifs', { s: value });
-    const gif = response.data.images['fixed_width_small'];
-
-    const pique = {
-      type: 'gif',
-      value: gif,
-      createdBy: userId,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    };
-
     try {
-      await firestore.add({ collection: 'posts' }, pique);
-      this.clearInput();
+      const response = await giphy.translate('gifs', { s: value });
+      const gif = response.data.images['fixed_width_small'];
+
+      this.props.handleSubmit({ type, value: gif });
     } catch (err) {
       console.error(err);
     }
   };
 
-  render() {
-    return (
-      <Fragment>
-        <Grid container alignItems="center" spacing={16} wrap="nowrap">
-          <Grid item xs>
-            <TextField label="Gif?" variant="outlined" fullWidth autoFocus inputRef={this.composerInput} />
-          </Grid>
-          <Grid item>
-            <IconButton color="primary" onClick={this.handleClick}>
-              <KeyboardReturn />
-            </IconButton>
-          </Grid>
+  render = () => (
+    <form onSubmit={this.handleSubmit}>
+      <Grid container alignItems="center" spacing={16} wrap="nowrap">
+        <Grid item xs>
+          <TextField
+            label="Gif?"
+            variant="outlined"
+            value={this.state.value}
+            onChange={this.handleChange}
+            fullWidth
+            autoFocus />
         </Grid>
-        <img alt="Powered by Giphy" src="/img/powered-by-giphy.png" height={11} width={100} />
-      </Fragment>);
-  }
+
+        <Grid item>
+          <IconButton color="primary" type="submit">
+            <KeyboardReturn />
+          </IconButton>
+        </Grid>
+      </Grid>
+
+      <img alt="Powered by Giphy" src="/img/powered-by-giphy.png" height={11} width={100} />
+    </form>);
 };
 
-const styles = theme => ({});
-
-export default compose(
-  withStyles(styles),
-  firestoreConnect(),
-  connect((state) => ({
-    userId: state.firebase.auth.uid,
-  }))
-)(ComposerText);
+export default ComposerGif;

@@ -1,27 +1,40 @@
 import React, { Fragment } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firestoreConnect, populate } from 'react-redux-firebase';
-import { map, reverse } from 'lodash';
+import { firestoreConnect } from 'react-redux-firebase';
+import { map } from 'lodash';
 import Pique from './Pique';
 
-const Feed = ({ piques, firebase }) => (
+const Feed = ({ piques }) => (
   <Fragment>
-    {reverse(map(piques, (pique, key) => <Pique pique={Object.assign({}, pique, { id: key })} piqueId={key} key={key} />))}
+    {piques.map(pique => <Pique pique={pique} key={pique.id} />)}
   </Fragment>);
 
-const populates = [{ child: 'createdBy', root: 'users', keyProp: 'id' }];
-const collection = 'posts';
-
 export default compose(
-  firestoreConnect(() => [
-    {
-      collection,
-      orderBy: [['createdAt', 'asc']],
-      populates,
+  firestoreConnect(props => {
+    let where;
+
+    if (props.type === 'tag') {
+      where = ['tags', 'array-contains', props.value];
     }
-  ]),
+
+    if (props.type === 'user') {
+      where = ['createdBy', '==', props.value];
+    }
+
+    return [{
+      collection: 'posts',
+      orderBy: ['createdAt', 'desc'],
+      where,
+    }];
+  }),
   connect((state) => ({
-    piques: populate(state.firestore, collection, populates),
+    piques: map(state.firestore.ordered.posts, p => ({
+      ...p,
+      createdBy: {
+        id: p.createdBy,
+        ...state.firestore.data.users[p.createdBy],
+      },
+    })),
   }))
 )(Feed);

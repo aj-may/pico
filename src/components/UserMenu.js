@@ -3,6 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -34,9 +35,15 @@ class UserMenu extends Component {
             <div className={classes.displayName}>{profile.displayName}</div>
           </Hidden>
         </Button>
+
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
-          <MenuItem onClick={null}>Settings</MenuItem>
-          <MenuItem onClick={firebase.logout}>Logout</MenuItem>
+          <MenuItem component={Link} to='/settings' onClick={this.handleClose}>
+            Settings
+          </MenuItem>
+
+          <MenuItem onClick={firebase.logout}>
+            Logout
+          </MenuItem>
         </Menu>
       </Fragment>);
   }

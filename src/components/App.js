@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Route, Switch, withRouter } from 'react-router-dom';
+import Navigation from './Navigation';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
+import Topic from '../pages/Topic';
+import Settings from '../pages/Settings';
 import FourOhFour from '../pages/FourOhFour';
 import ChooseHandle from '../pages/ChooseHandle';
 import Loading from './Loading';
@@ -14,10 +17,16 @@ const App = ({ isLoading, isAuthenticated, needsHandle }) => {
   if (needsHandle) return <ChooseHandle />;
 
   return (
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route component={FourOhFour} />
-    </Switch>
+    <Fragment>
+      <Navigation />
+
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/:type(tag|user)/:value" component={Topic} />
+        <Route exact path="/settings" component={Settings} />
+        <Route component={FourOhFour} />
+      </Switch>
+    </Fragment>
   );
 };
 

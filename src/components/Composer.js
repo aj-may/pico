@@ -13,21 +13,26 @@ import ComposerAudio from './ComposerAudio';
 import ComposerGif from './ComposerGif';
 
 class Composer extends Component {
-  constructor(props) {
-    super(props);
+  state = { type: null };
 
-    this.state = {
-      type: null,
+  handleChange = type => this.setState({ type });
+
+  handleSubmit = async pique => {
+    const { firestore, createdBy, tag } = this.props;
+    const createdAt = firestore.FieldValue.serverTimestamp();
+
+    try {
+      await firestore.add(
+        { collection: 'posts' },
+        { createdBy, createdAt, tag, ...pique });
+
+      this.setState({ type: null });
+    } catch (err) {
+      console.error(err);
     }
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  async handleChange(type) {
-    this.setState({ type });
-  }
-
-  render() {
+  render = () =>  {
     const { avatarUrl, classes } = this.props;
     const { type } = this.state;
 
@@ -38,15 +43,15 @@ class Composer extends Component {
         </Grid>
         <Grid item xs className={classes.relative}>
           {!type && <ComposerChooser handleChange={this.handleChange} />}
-          {type === 'text' && <ComposerText />}
-          {type === 'audio' && <ComposerAudio />}
-          {type === 'gif' && <ComposerGif />}
+          {type === 'text' && <ComposerText handleSubmit={this.handleSubmit} />}
+          {type === 'audio' && <ComposerAudio handleSubmit={this.handleSubmit} />}
+          {type === 'gif' && <ComposerGif handleSubmit={this.handleSubmit} />}
           {type && <IconButton aria-label="Close" className={classes.close} onClick={() => this.handleChange(null)}>
             <Close fontSize="small" />
           </IconButton>}
         </Grid>
       </Grid>);
-  }
+  };
 };
 
 const styles = theme => ({
@@ -72,6 +77,6 @@ export default compose(
   firestoreConnect(),
   connect((state) => ({
     avatarUrl: state.firebase.profile.avatarUrl,
-    userId: state.firebase.auth.uid,
+    createdBy: state.firebase.auth.uid,
   }))
 )(Composer);

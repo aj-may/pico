@@ -1,65 +1,46 @@
-import React, { Component, createRef } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 
 class ComposerText extends Component {
-  constructor(props) {
-    super(props);
-    this.composerInput = createRef();
-  }
+  state = { value: '' };
 
-  clearInput() {
-    this.composerInput.current.value = '';
-  }
+  handleChange = event =>
+    this.setState({ value: event.target.value });
 
-  async handleClick() {
-    const { firestore, userId } = this.props;
-    const { value } = this.composerInput.current;
+  handleSubmit = event => {
+    event.preventDefault();
+    const type = 'text';
+    const { value } = this.state;
 
     if (!value) return;
 
-    const pique = {
-      type: 'text',
-      value,
-      createdBy: userId,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    }
+    this.props.handleSubmit({ type, value });
+  };
 
-    try {
-      await firestore.add({ collection: 'posts' }, pique);
-      this.clearInput();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  render() {
-    return (
+  render = () => (
+    <form onSubmit={this.handleSubmit}>
       <Grid container alignItems="center" spacing={16} wrap="nowrap">
         <Grid item xs>
-          <TextField label="Wut?" variant="outlined" fullWidth autoFocus inputRef={this.composerInput} inputProps={{ maxLength: 5 }} />
+          <TextField
+            label="Wut?"
+            variant="outlined"
+            value={this.state.value}
+            onChange={this.handleChange}
+            fullWidth
+            autoFocus
+            inputProps={{ maxLength: 5 }} />
         </Grid>
+
         <Grid item>
-          <IconButton color="primary" onClick={() => this.handleClick()}>
+          <IconButton color="primary" type="submit">
             <KeyboardReturn />
           </IconButton>
         </Grid>
-      </Grid>);
-  }
+      </Grid>
+    </form>);
 };
 
-const styles = theme => ({});
-
-export default compose(
-  withStyles(styles),
-  firestoreConnect(),
-  connect((state) => ({
-    userId: state.firebase.auth.uid,
-  }))
-)(ComposerText);
+export default ComposerText;

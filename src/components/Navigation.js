@@ -1,17 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Search from './Search';
 import UserMenu from './UserMenu';
 import Grow from './Grow';
 
-const Navigation = ({ className }) => (
-  <AppBar position="static" className={className}>
+const Navigation = () => (
+  <AppBar position="static">
     <Toolbar>
-      <Typography variant="h6" color="inherit">Piquo</Typography>
+      <Button component={Link} to="/" color='inherit'>
+        <Typography variant="h6" color="inherit">Piquo</Typography>
+      </Button>
+
       <Grow />
-      <Search />
+
       <UserMenu />
     </Toolbar>
   </AppBar>);
